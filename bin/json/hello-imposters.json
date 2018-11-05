@@ -1,0 +1,41 @@
+{
+  "port": 8081,
+  "protocol": "http",
+  "stubs": [
+    {
+      "predicates": [{
+        "equals": {
+          "path": "/hello",
+          "query": {"ids": "1000,2000"}
+        }
+      }],
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {"Content-Type": "application/json"},
+          "body": {
+            "content": [
+              {
+                "id": "1000",
+                "name": "Product 1000"
+              },
+              {
+                "id": "2000",
+                "name": "Product 2000"
+              }
+            ]
+          }
+        }
+      }]
+    },
+    {
+      "responses": [{
+        "is": {
+          "statusCode": 200,
+          "headers": {"Content-Type": "application/json"},
+          "body": "No Route"
+        }
+      }]
+    }
+  ]
+}
