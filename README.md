@@ -5,36 +5,40 @@ Wine Mates アプリケーション - Virtual Wine Cellar(VWC) 仮想サービ�
 このアプリケーションは、vwc-server-java (ワイン情報検索 API)のモック実装です。
 mountebank(http://mbtest.org) - マウンティバンクを使用しています。
 
+# What's New
+
+2018/11/05: API 0.0.7 の一部に対応しました。
+~~~
+サポートするAPI
+・ワイン
+　・IDによる検索: GET /wines/{wineId}  // アメリカ及び日本のワインのみ
+　・条件付き検索
+　　・国: GET /wines?countryCode={countryCode}
+~~~
+
 # HowTo: Build & Run
 
 ~~~
-# git clone https://github.com/smachida/vwc-wine-search.git
-# cd vwc-wine-search
+# git clone https://github.com/smachida/vwc-server-imposters.git
+# cd vwc-server-imposters/bin
 ~~~
 
 ~~~
-以下のファイルの内容を修正
+# ./start-imposters.sh  // 起動
 
-src/app/wine.service.ts:
-WEB_API_URL のホスト名及びポート番号を、あらかじめ起動した vwc-server-java のエンドポイントにあわせて
-「localhost:28080」などに変更。
+http://localhost:8080/api/v1/wine/wines?countryCode=CC0017 にアクセス
 
-〜〜〜　省略　〜〜〜
-@Injectable()
-export class WineService {
-  WEB_API_URL: string = "http://ec2-52-192-145-111.ap-northeast-1.compute.amazonaws.com:28080/api/v1/wine/wines";
-  //DEFAULT_SIZE: string = "30";
-  〜〜〜　省略　〜〜〜
-   
+# ./stop-imposters.sh    // 停止
 ~~~
 
-~~~
-# npm install
-# ng build --prod
-# docker build --tag=vwc-wine-search .
-# docker run -d -p 80:80 --rm --name vwc-wine-search vwc-wine-search
+# 設定ファイル
 
-http://localhost にアクセス
+~~~
+bin/json 配下:
+・importers.ejs  // 読み込む設定ファイルの指定
+・wine-imposters-test.json  // メインの設定ファイル(開発時に使用)
+・wine-imposters-full.json  // 多くのAPIを実装(参考)
+・hello-imposters.json      // テスト用
 ~~~
 
 # 依存関係
@@ -43,6 +47,9 @@ http://localhost にアクセス
 前提条件:
 nodejs
 npm
-AngularCLI
-docker
+~~~
+
+~~~
+mountebank のインストール:
+# npm install -g mountebank
 ~~~
